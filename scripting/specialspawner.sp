@@ -63,10 +63,8 @@ ConVar
 	g_cSpawnRange,
 	g_cDiscardRange,
 	g_cSafeSpawnRange,
-	// 新增：方位概率相关
 	g_cUseDirChance,
 	g_cSpawnDirChance[SI_MAX_SIZE],
-	// 新增：坦克禁止刷特
 	g_cTankBlockSpawn;
 
 float
