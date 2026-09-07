@@ -1093,13 +1093,9 @@ void ExecuteSpawnQueue(int totalSI, bool retry) {
 	delete aList;
 	g_bInSpawnTime = true;
 
-	// ----- 方向逻辑修改 -----
 	if (!g_bUseDirChance) {
-		// 原有逻辑（全局方向）
 		g_iDirection = g_bFinaleStarted ? SPAWN_NEAR_IT_VICTIM : (!retry ? SPAWN_NO_PREFERENCE : (!find ? SPAWN_LARGE_VOLUME/*SPAWN_SPECIALS_ANYWHERE*/ : SPAWN_IN_FRONT_OF_SURVIVORS));
 	}
-	// 如果启用方位概率，不在外部设置全局方向，循环内按特感类型逐个设定
-	// -----------------------
 
 	count = 0;
 	find = false;
@@ -1109,15 +1105,14 @@ void ExecuteSpawnQueue(int totalSI, bool retry) {
 	for (i = 0; i < spawnSize; i++) {
 		index = aQueue.Get(i) + 1;
 
-		// ===== 按特感类型设置方位 =====
 		if (g_bUseDirChance) {
-			oldDir = g_iDirection; // 保存当前方向（可能被之前循环修改，但此处我们覆盖）
+			oldDir = g_iDirection; 
 			int chance = g_iSpawnDirChance[index - 1]; // index 是类ID (1~6)
 			if (GetURandomFloat() * 100.0 < float(chance))
 				g_iDirection = SPAWN_IN_FRONT_OF_SURVIVORS;   // 前方
 			else
 				g_iDirection = SPAWN_BEHIND_SURVIVORS;        // 后方
-			// 注意：这里直接修改全局g_iDirection，L4D_OnGetScriptValueInt会读取它
+			
 		}
 		// =================================
 
@@ -1135,7 +1130,7 @@ void ExecuteSpawnQueue(int totalSI, bool retry) {
 
 		// 如果使用了方位概率，恢复旧方向（可选，但一般无需恢复，因为下次循环会重新设置）
 		if (g_bUseDirChance) {
-			g_iDirection = oldDir; // 恢复之前的值，保持外部逻辑不受影响（但外部其实不用）
+			g_iDirection = oldDir; 
 		}
 	}
 
